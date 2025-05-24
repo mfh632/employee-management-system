@@ -27,7 +27,7 @@ class Employee extends Model
         'department_id',
         'designation_id',
         'status',
-        'starting_date',
+        'start_date',
         'end_date',
         'basic',
         'house_rent',
@@ -37,7 +37,7 @@ class Employee extends Model
         'image'
     ];
 
-    public function decrement(): BelongsTo
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }

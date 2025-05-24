@@ -7,7 +7,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Volt::route('/employees', 'show-employees')->name('employees.index');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -19,6 +19,9 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
+    Volt::route('/employees', 'show-employees')->name('employees.index');
+    Volt::route('/employees/create', 'employees.create')->name('employees.create');
 });
 
 require __DIR__.'/auth.php';

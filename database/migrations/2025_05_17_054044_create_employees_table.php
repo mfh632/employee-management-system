@@ -31,7 +31,7 @@ return new class extends Migration
             $table->foreignId('department_id')->constrained()->restrictOnDelete();
             $table->foreignId('designation_id')->constrained()->restrictOnDelete();
             $table->boolean('status')->default(false);
-            $table->date('starting_date');
+            $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->float('basic')->default(0);
             $table->integer('house_rent')->default(0);
