@@ -31,13 +31,14 @@ return new class extends Migration
             $table->foreignId('department_id')->constrained()->restrictOnDelete();
             $table->foreignId('designation_id')->constrained()->restrictOnDelete();
             $table->boolean('status')->default(false);
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
+            $table->date('started_at');
+            $table->date('retired_at')->nullable();
             $table->float('basic')->default(0);
             $table->integer('house_rent')->default(0);
             $table->integer('medical_allowance')->default(0);
             $table->integer('transport')->default(0);
             $table->integer('festival_bonus')->default(0);
+            $table->binary('signature')->nullable();
             $table->timestamps();
         });
     }

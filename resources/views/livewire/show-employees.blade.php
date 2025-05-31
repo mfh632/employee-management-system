@@ -30,22 +30,22 @@ new class extends Component {
 
 <div>
     <h1>{{ __('Employees') }}</h1>
-    <table class="table">
-        <tr>
-            <th>ID</th>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Email</th>
-        </tr>
-        @foreach ($this->employees as $employee)
-            <tr>
-                <th>{{ $employee->id }}</th>
-                <th>{{ $employee->first_name}}</th>
-                <th>{{ $employee->last_name }}</th>
-                <th>{{ $employee->email }}</th>
-            </tr>
-        @endforeach
 
+    <div class="employee-list">
+        @if($this->employees->count())
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                @foreach ($this->employees as $employee)
+                    <div class="rounded-lg bg-indigo-300 p-4 dark:bg-indigo-800 dark:text-indigo-400">
+                        <h4>{{ $employee->id }}</h4>
+                        <p>{{ $employee->full_name}}</p>
+                        <p>{{ $employee->email }}</p>
+                        <p>{{ $employee->gross_salary }}</p>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <h1 class="text-2xl text-center font-medium">{{ __('Not found') }}</h1>
+        @endif
+    </div>
 
-    </table>
 </div>

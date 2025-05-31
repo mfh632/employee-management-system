@@ -15,21 +15,22 @@ new class extends Component {
     public $guardian_phone;
     public $blood_group;
     public $religion;
-    public $gender = 'male';
+    public $gender;
     public $birth_date;
-    public $marital_status = 'false';
+    public $marital_status;
     public $spouse_name;
     public $department_id;
     public $designation_id;
-    public $status = 'false';
-    public $start_date;
-    public $end_date;
+    public $status;
+    public $started_at;
+    public $retired_at;
     public $basic;
     public $house_rent;
     public $medical_allowance;
     public $transport;
     public $festival_bonus;
     public $image;
+    public $signature;
 
     public $departments = [];
 
@@ -40,10 +41,17 @@ new class extends Component {
     {
         $this->departments = \App\Models\Department::pluck('name', 'id');
         $this->designations = \App\Models\Designation::pluck('name', 'id');
+        $this->started_at = now()->format('Y-m-d');
+        $this->gender = Employee::GENDER_MALE;
+        $this->status = Employee::STATUS_DEACTIVE;
+        $this->marital_status = Employee::MARITAL_STATUS_SINGLE;
+        $this->blood_group = Employee::BLOOD_GROUP_A_POSITIVE;
+        $this->religion = Employee::RELIGION_ISLAM;
     }
 
     public function create()
     {
+
         $validated = $this->validate([
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
@@ -55,28 +63,31 @@ new class extends Component {
             'guardian_name' => 'nullable|string|max:50',
             'guardian_phone' => 'nullable|string|max:20',
             'blood_group' => 'nullable|string|max:10',
-            'religion' => 'nullable|string|max:50',
-            'gender' => 'nullable|string|in:male,female,other',
-            'birth_date' => 'nullable|date',
-            'marital_status' => 'nullable|string|in:true,false',
+            'religion' => 'required|string|max:50',
+            'gender' => 'required|string',
+            'birth_date' => 'required|date',
+            'marital_status' => 'nullable|string',
             'spouse_name' => 'nullable|string|max:255',
             'department_id' => 'required|integer|exists:departments,id',
             'designation_id' => 'required|integer|exists:designations,id',
-            'status' => 'required|string|in:true,false',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'required|boolean',
+            'started_at' => 'required|date',
+            'retired_at' => 'nullable|date|after_or_equal:started_at',
             'basic' => 'required|numeric|min:0',
             'house_rent' => 'nullable|numeric|min:0',
             'medical_allowance' => 'nullable|numeric|min:0',
             'transport' => 'nullable|numeric|min:0',
             'festival_bonus' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|max:2048',
+            'signature' => 'nullable'
         ]);
 
 
         if ($this->image) {
             $validated['image'] = $this->image->store('employees', 'public');
         }
+
+
 
         Employee::create($validated);
 
@@ -110,17 +121,27 @@ new class extends Component {
             <flux:input wire:model="guardian_phone" :label="__('Guardian Phone')" type="text" :placeholder="__('Guardian Phone')" />
         </div>
         <div class="grid grid-cols-3 gap-4">
-            <flux:input wire:model="blood_group" :label="__('Blood Group')" type="text" :placeholder="__('Blood Group')" />
-            <flux:input wire:model="religion" :label="__('Religion')" type="text" :placeholder="__('Religion')" />
+            <flux:select wire:model="blood_group" :label="__('Blood Group')" placeholder="Choose ...">
+                @foreach(App\Models\Employee::BLOOD_GROUP_ARRAY as $key => $label)
+                    <flux:select.option :value="$key">{{ $label }}</flux:select.option>
+                @endforeach
+            </flux:select>
+
+            <flux:select wire:model="religion" :label="__('Religion')" placeholder="Choose ...">
+                @foreach(App\Models\Employee::RELIGION_ARRAY as $key => $label)
+                    <flux:select.option :value="$key">{{ $label }}</flux:select.option>
+                @endforeach
+            </flux:select>
 
             <flux:input wire:model="birth_date" :label="__('Birth Date')" type="date" :placeholder="__('Birth Date')" />
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <flux:radio.group wire:model="marital_status" :label="__('Marital Status')">
-                <flux:radio value='true' label="Marrid" checked />
-                <flux:radio value='false' label="Single" />
-            </flux:radio.group>
+            <flux:select wire:model="marital_status" :label="__('Merital Status')" placeholder="Choose ...">
+                @foreach(App\Models\Employee::MARITAL_STATUS_ARRAY as $key => $label)
+                    <flux:select.option :value="$key">{{ $label }}</flux:select.option>
+                @endforeach
+            </flux:select>
             <flux:input wire:model="spouse_name" :label="__('Spouse Name')" type="text" :placeholder="__('Spouse Name')" />
         </div>
 
@@ -140,18 +161,20 @@ new class extends Component {
                 @endforeach
             </flux:select>
 
-            <flux:input wire:model="start_date" :label="__('Start Date')" type="date" :placeholder="__('Start Date')" />
+            <flux:input wire:model="started_at" :label="__('Joining Date')" type="date" :placeholder="__('Joining Date')" />
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <flux:radio.group wire:model="gender" label="Gender">
-                <flux:radio value="male" label="Male" checked />
-                <flux:radio value="female" label="Female" />
-            </flux:radio.group>
-            <flux:radio.group wire:model="status" label="Status">
-                <flux:radio value="true" label="Active" checked />
-                <flux:radio value="false" label="Deactive" />
-            </flux:radio.group>
+            <flux:select wire:model="gender" :label="__('Gender')" placeholder="Choose Gender...">
+                @foreach(App\Models\Employee::GENDER_ARRAY as $key => $label)
+                    <flux:select.option :value="$key">{{ $label }}</flux:select.option>
+                @endforeach
+            </flux:select>
+            <flux:select wire:model="status" :label="__('Status')" placeholder="Choose ...">
+                @foreach(App\Models\Employee::STATUS_ARRAY as $key => $label)
+                    <flux:select.option :value="$key">{{ $label }}</flux:select.option>
+                @endforeach
+            </flux:select>
         </div>
 
         <div class="grid grid-cols-5 gap-4">
