@@ -26,6 +26,15 @@
                                        wire:navigate>{{ __('New Employee') }}</flux:navlist.item>
 
                 </flux:navlist.group>
+                
+                <flux:navlist.group :heading="__('General')" class="grid">
+                    <flux:navlist.item icon="home"
+                                       :href="route('departments.index')"
+                                       :current="request()->routeIs('departments.index')"
+                                       wire:navigate>{{ __('Department List') }}</flux:navlist.item>
+                    
+                </flux:navlist.group>
+
 
             </flux:navlist>
 
@@ -136,9 +145,17 @@
                 </flux:menu>
             </flux:dropdown>
         </flux:header>
-
+          
         {{ $slot }}
-
+        
         @fluxScripts
+
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.on('showMessage', (data) => {
+                    alert(data.message);
+                });
+            });
+        </script>
     </body>
 </html>
