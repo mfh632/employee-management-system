@@ -29,13 +29,15 @@
                 
                 <flux:navlist.group :heading="__('General')" class="grid">
                     <flux:navlist.item icon="home"
-                                       :href="route('departments.index')"
-                                       :current="request()->routeIs('departments.index')"
-                                       wire:navigate>{{ __('Department List') }}</flux:navlist.item>
-                    
+                        :href="route('departments.index')"
+                        :current="request()->routeIs('departments.index')"
+                        wire:navigate>{{ __('Department List') }}</flux:navlist.item>
+                    <flux:navlist.item icon="home"
+                        :href="route('designations.index]')"
+                        :current="request()->routeIs('designations.index]')"
+                        wire:navigate>{{ __('Designation List') }}</flux:navlist.item>
                 </flux:navlist.group>
-
-
+                
             </flux:navlist>
 
             <flux:spacer />
