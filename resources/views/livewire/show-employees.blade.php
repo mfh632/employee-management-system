@@ -40,6 +40,15 @@ new class extends Component {
                         <p>{{ $employee->full_name}}</p>
                         <p>{{ $employee->email }}</p>
                         <p>{{ $employee->gross_salary }}</p>
+                        <div class="flex justify-end mt-2">
+                            <a href="{{ route('employees.edit', $employee->id) }}" wire:navigate>
+                                <x-button-primary>{{ __('Edit') }}</x-button-primary>
+                            </a>
+                            
+                            <x-button-danger wire:click="delete({{ $employee->id }})">
+                                {{ __('Delete') }}  
+                            </x-button-danger>
+                        </div>
                     </div>
                 @endforeach
             </div>
