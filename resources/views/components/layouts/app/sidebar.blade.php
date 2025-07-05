@@ -36,6 +36,10 @@
                         :href="route('designations.index]')"
                         :current="request()->routeIs('designations.index]')"
                         wire:navigate>{{ __('Designation List') }}</flux:navlist.item>
+                    <flux:navlist.item icon="home"
+                        :href="route('qualifications.index')"
+                        :current="request()->routeIs('qualifications.index]')"
+                        wire:navigate>{{ __('Qualification List') }}</flux:navlist.item>
                 </flux:navlist.group>
                 
             </flux:navlist>

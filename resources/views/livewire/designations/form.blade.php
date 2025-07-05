@@ -37,6 +37,12 @@ new class extends Component {
         $this->dispatch('showMessage', message: 'Designation created successfully.');
     }
 
+    public function cancel()
+    {
+        $this->reset(['name', 'description', 'designationId']);
+        $this->dispatch('refreshDesignations');
+    }
+
 }; ?>
 
 <div>
@@ -47,9 +53,12 @@ new class extends Component {
             <flux:textarea wire:model="description" :label="__('Description')" :placeholder="__('Description')" />
         </div>        
         <div class="flex justify-end">        
-            <flux:button type="submit" variant="primary" class="w-full">
+            <x-button-primary class="w-2xs" type="submit">
                 {{ __('Save') }}
-            </flux:button>
+            </x-button-primary>
+            <x-button-danger class="ml-3 w-2xs" wire:click="cancel">
+                {{ __('Cancel') }}
+            </x-button-danger>
         </div>
     </form>
 </div>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('passing_year',20);
             $table->string('board_name',20);
             $table->string('exam_name',20);
-            $table->string('result_type',20);
+            $table->integer('result_type')->nullable();
             $table->string('result',20);
             $table->string('out_of',5)->nullable();
             $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
